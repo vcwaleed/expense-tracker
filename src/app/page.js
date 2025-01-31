@@ -1,7 +1,12 @@
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 export default function Home(){
   return (
+    <ProtectedRoute>
     <main>
-      <span>Expanse Cal culator </span>
+      <Navbar/>
+      
     </main>
+    </ProtectedRoute>
   )
 }
