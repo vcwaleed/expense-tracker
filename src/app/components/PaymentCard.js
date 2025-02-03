@@ -3,7 +3,7 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend } from "chart.js";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 export default function PaymentCard() {
@@ -12,62 +12,50 @@ export default function PaymentCard() {
     const [cashData, setCashData] = useState(Array(30).fill(0));
     const [labels, setLabels] = useState([]);
     useEffect(() => {
-        const fetchTransactions = async () => {
-            if (!user) return;
-            try {
-                const querySnapshot = await getDocs(collection(db, "users", user.uid, "transactions"));
-                let balance = 0;
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.type === "cash") {
-                        balance += Number(data.amount);
-                    } else if (data.type === "expense") {
-                        balance -= Number(data.amount);
-                    }
-                });
-                setAvailableBalance(balance);
-            } catch (error) {
-                console.error("Error fetching transactions:", error);
-            }
-        };
-        fetchTransactions();
+        if (!user) return;
+        const transactionsRef = collection(db, "users", user.uid, "transactions");
+        const unsubscribeBalance = onSnapshot(transactionsRef, (querySnapshot) => {
+            let balance = 0;
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                balance += data.type === "cash" ? Number(data.amount) : -Number(data.amount);
+            });
+            setAvailableBalance(balance);
+        });
+        return () => unsubscribeBalance();
     }, [user]);
-
     useEffect(() => {
-        const fetchTransactions = async () => {
-            if (!user) return;
-            try {
-                const querySnapshot = await getDocs(collection(db, "users", user.uid, "transactions"));
-                let transactions = [];
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.type === "cash" && data.date) {
-                        const transactionDate = data.date.toDate();
-                        transactions.push({
-                            amount: Number(data.amount),
-                            date: transactionDate
-                        });
-                    }
-                });
-                const today = new Date();
-                const year = today.getFullYear();
-                const month = today.getMonth();
-                const totalDays = new Date(year, month + 1, 0).getDate();
-                let dailyData = Array(totalDays).fill(0);
-                const dateLabels = Array.from({ length: totalDays }, (_, i) => `Day ${i + 1}`);
-                setLabels(dateLabels);
-                transactions.forEach(({ date, amount }) => {
-                    if (date.getMonth() === month && date.getFullYear() === year) {
-                        const dayIndex = date.getDate() - 1;
-                        dailyData[dayIndex] += amount;
-                    }
-                });
-                setCashData(dailyData);
-            } catch (error) {
-                console.error("Error fetching transactions:", error);
-            }
-        };
-        fetchTransactions();
+        if (!user) return;
+        const transactionsRef = collection(db, "users", user.uid, "transactions");
+        const cashQuery = query(transactionsRef, where("type", "==", "cash"));
+
+        const unsubscribeCash = onSnapshot(cashQuery, (querySnapshot) => {
+            const transactions = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.date) {
+                    transactions.push({
+                        amount: Number(data.amount),
+                        date: data.date.toDate()
+                    });
+                }
+            });
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const dailyData = Array(totalDays).fill(0);
+            const dateLabels = Array.from({ length: totalDays }, (_, i) => `Day ${i + 1}`);
+            transactions.forEach(({ date, amount }) => {
+                if (date.getMonth() === month && date.getFullYear() === year) {
+                    const dayIndex = date.getDate() - 1;
+                    dailyData[dayIndex] += amount;
+                }
+            });
+            setLabels(dateLabels);
+            setCashData(dailyData);
+        });
+        return () => unsubscribeCash();
     }, [user]);
     const data = {
         labels: labels,

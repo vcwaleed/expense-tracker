@@ -18,7 +18,6 @@ export default function Uploadcard() {
             try {
                 const querySnapshot = await getDocs(collection(db, "users", user.uid, "transactions"));
                 let balance = 0;
-
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     if (data.type === "cash") {
@@ -32,7 +31,6 @@ export default function Uploadcard() {
                 console.error("Error fetching transactions:", error);
             }
         };
-
         fetchTransactions();
     }, [user]);
     const handleCashSubmit = async (e) => {

@@ -3,61 +3,56 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 export default function MonthlyExpenseChart() {
     const { user } = useAuth();
     const [totalExpenses, settotalExpenses] = useState(0);
     const [monthlyExpenses, setMonthlyExpenses] = useState([]);
     useEffect(() => {
-        const fetchTransactions = async () => {
-            if (!user) return;
-            try {
-                const querySnapshot = await getDocs(collection(db, "users", user.uid, "transactions"));
-                let expenses = 0;
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.type === "expense") {
-                        expenses += Number(data.amount);
-                    }
-                });
-                settotalExpenses(expenses);
-            } catch (error) {
-                console.error("Error fetching transactions:", error);
-            }
-        };
-        fetchTransactions();
+        if (!user) return;
+        const expensesQuery = query(
+            collection(db, "users", user.uid, "transactions"),
+            where("type", "==", "expense")
+        );
+        const unsubscribeTotal = onSnapshot(expensesQuery, (querySnapshot) => {
+            let total = 0;
+            querySnapshot.forEach((doc) => {
+                total += Number(doc.data().amount);
+            });
+            settotalExpenses(total);
+        });
+        return () => unsubscribeTotal();
     }, [user]);
     useEffect(() => {
-        const fetchTransactionsmonthly = async () => {
-            if (!user) return;
-            try {
-                const querySnapshot = await getDocs(collection(db, "users", user.uid, "transactions"));
-                const expensesByMonth = {};
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.type === "expense" && data.date) {
-                        const dateObj = data.date.toDate();
-                        const month = dateObj.getMonth();
-                        const year = dateObj.getFullYear();
-                        const key = `${year}-${month}`;
-                        if (!expensesByMonth[key]) {
-                            expensesByMonth[key] = 0;
-                        }
-                        expensesByMonth[key] += Number(data.amount);
-                    }
-                });
-                const formattedExpenses = Array(12).fill(0);
-                Object.keys(expensesByMonth).forEach((key) => {
-                    const [, month] = key.split('-');
-                    formattedExpenses[parseInt(month)] = expensesByMonth[key];
-                });
-                setMonthlyExpenses(formattedExpenses);
-            } catch (error) {
-                console.error("Error fetching transactions:", error);
-            }
-        };
-        fetchTransactionsmonthly();
+        if (!user) return;
+        const expensesQuery = query(
+            collection(db, "users", user.uid, "transactions"),
+            where("type", "==", "expense")
+        );
+        const unsubscribeMonthly = onSnapshot(expensesQuery, (querySnapshot) => {
+            const expensesByMonth = {};
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.date) {
+                    const dateObj = data.date.toDate();
+                    const month = dateObj.getMonth();
+                    const year = dateObj.getFullYear();
+                    const key = `${year}-${month}`;
+                    expensesByMonth[key] = (expensesByMonth[key] || 0) + Number(data.amount);
+                }
+            });
+            const formattedExpenses = Array(12).fill(0);
+            const currentYear = new Date().getFullYear();
+            Object.entries(expensesByMonth).forEach(([key, amount]) => {
+                const [year, month] = key.split('-').map(Number);
+                if (year === currentYear) {
+                    formattedExpenses[month] = amount;
+                }
+            });
+            setMonthlyExpenses(formattedExpenses);
+        });
+        return () => unsubscribeMonthly();
     }, [user]);
     const chartData = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],

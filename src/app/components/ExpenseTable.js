@@ -1,30 +1,24 @@
 'use client'
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 export default function ExpenseTable() {
     const [expenses, setExpenses] = useState([]);
     const { user } = useAuth();
     useEffect(() => {
         if (!user) return;
-        const fetchExpenses = async () => {
-            try {
-                const expensesRef = collection(db, "users", user.uid, "transactions");
-                const q = query(expensesRef, where("type", "==", "expense"));
-                const querySnapshot = await getDocs(q);
-                const expenseData = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    date: doc.data().date?.toDate().toLocaleDateString() || "N/A"
-                }));
-
-                setExpenses(expenseData);
-            } catch (error) {
-                console.error("Error fetching expenses:", error);
-            }
-        };
-        fetchExpenses();
+        const expensesRef = collection(db, "users", user.uid, "transactions");
+        const q = query(expensesRef, where("type", "==", "expense"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const expenseData = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                date: doc.data().date?.toDate().toLocaleDateString() || "N/A"
+            }));
+            setExpenses(expenseData);
+        });
+        return () => unsubscribe();
     }, [user]);
     return (
         <main>
