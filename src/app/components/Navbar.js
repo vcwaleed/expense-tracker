@@ -9,21 +9,16 @@ export default function Navbar() {
             <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
                 <Link href="/" className="flex items-center space-x-1">
                     <Image
-                        src="/images/trlogo.png"
+                        src="/images/expense.png"
                         height={3}
                         width={80}
                         className="h-16"
                         alt="Blog Logo"
                     />
-
                 </Link>
-                <span className="font-sans font-bold">Track Your Daily Expenses</span>
-
-
+                <span className="font-serif font-bold">Track Your Daily Expenses</span>
                 <div>
-
                     <button className="px-4 py-2 text-white bg-gray-700 rounded-lg hover:bg-red-600" onClick={logout}>Logout</button>
-
                 </div>
             </div>
         </nav>

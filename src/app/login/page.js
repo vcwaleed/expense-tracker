@@ -3,11 +3,13 @@ import { useState } from "react";
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from "../firebase/config";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false); 
     const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
     const router = useRouter();
 
@@ -18,20 +20,29 @@ export default function Login() {
                 setErrorMessage("Please enter both email and password.");
                 return;
             }
+            setLoading(true);
             const res = await signInWithEmailAndPassword(email, password);
 
             if (!res) {
                 setErrorMessage("Your login Email or Password is incorrect. Please try again.");
+                setLoading(false);
                 return;
             }
             setEmail("");
             setPassword("");
-            router.push("/");
+            setTimeout(() => {
+                setLoading(false); 
+                router.push("/"); 
+            }, 2000);
         } catch (error) {
             console.error("Login error:", error);
             setErrorMessage("An error occurred during login. Please try again.");
+            setLoading(false);
         }
     };
+    if (loading) {
+        return <LoadingSpinner />; 
+    }
 
     return (
         <main className="flex justify-center items-center min-h-screen">

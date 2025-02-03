@@ -10,6 +10,9 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        expensecolor:"rgb(252,228,228)",
+        darkorange: '#FF8C00',
+        webbackground:'f2f2f2',
       },
     },
   },

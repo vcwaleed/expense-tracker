@@ -2,11 +2,15 @@
 import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from "../firebase/config";
+import { useRouter } from "next/navigation";
+import LoadingSpinner from "../components/LoadingSpinner";
 export default function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
     const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+    const router = useRouter();
     const handleSignup = async () => {
         try {
             setErrorMessage("");
@@ -19,19 +23,34 @@ export default function SignUp() {
                 setErrorMessage("Password must be at least 8 characters long.");
                 return;
             }
+            setLoading(true);
             const res = await createUserWithEmailAndPassword(email, password);
             if (!res) {
-                setErrorMessage("Registration failed. Please try again.");
+                setErrorMessage("Registration failed.Use Changed email.");
+
+                setLoading(false);
+                alert("Already Registered");
+                setEmail("");
+            setPassword("");
+                
+
                 return;
             }
             setEmail("");
             setPassword("");
+            setTimeout(() => {
+                setLoading(false);
+                router.push("/login"); 
+            }, 2000);
 
         } catch (error) {
+
             console.log(error);
+            setLoading(false);
         }
 
     };
+   
 
     return (
         <main className="flex justify-center items-center min-h-screen">
