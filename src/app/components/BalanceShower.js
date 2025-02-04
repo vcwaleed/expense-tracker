@@ -33,17 +33,26 @@ export default function BalanceDetails() {
     };
   }, [user]);
   return (
-    <main>
-      <section className="block max-w-lg p-6  hover:border-gray-100">
-        <section className="flex flex-col">
-          <span className="font-mono text-2xl font-semibold">Balance Details</span>
-          <span className="mt-10 font-mono">Available Balance: ${availableBalance}</span>
-          <span className="mt-10 font-mono">Total Expenses: ${totalExpenses}</span>
-          <span className="mt-14 font-mono text-blue-700 text-center">
-            <Link href='/'>Click For More Details</Link>
-          </span>
-        </section>
+    <main className="flex justify-center items-center   dark:bg-gray-900">
+    <section className="w-full max-w-md p-5 dark:bg-gray-800  dark:border-gray-700">
+      <section className="flex flex-col">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white ">
+          Balance Details
+        </h2>
+        <p className="mt-6 text-gray-700 dark:text-gray-300 text-sm">
+          Available Balance: <span className="font-bold text-green-600 dark:text-green-400">${availableBalance}</span>
+        </p>
+        <p className="mt-3 text-gray-700 dark:text-gray-300 text-sm">
+          Total Expenses: <span className="font-bold text-red-600 dark:text-red-400">${totalExpenses}</span>
+        </p>
+        <div className="mt-6 text-center">
+          <Link href="/" className="text-sm text-blue-600 hover:underline dark:text-blue-400">
+            Click For More Details
+          </Link>
+        </div>
       </section>
-    </main>
+    </section>
+  </main>
+  
   );
 }
