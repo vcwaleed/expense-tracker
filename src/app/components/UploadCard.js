@@ -78,7 +78,7 @@ export default function Uploadcard() {
     };
     return (
         <main>
-            <section className="block max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-700">
+            <section className="block max-w-lg p-6   hover:border-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-700">
                 <div className='flex flex-row space-x-4 justify-center'>
                     <div
                         className="bg-white border border-gray-300 h-24 w-24 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex items-center justify-center cursor-pointer"
@@ -201,8 +201,8 @@ export default function Uploadcard() {
                 )}
                 <div className="max-w-lg flex items-center my-3">
                     <div className='flex pl-4 py-2 space-x-6'>
-                        <div className='py-7'>
-                            <span className='font-semibold'>Welcome To Expenses Tracker </span>
+                        <div className=' lg:py-7'>
+                            <span className='font-semibold '>Welcome To Expenses Tracker </span>
                             <span><br />We Help You To Track your Expenses</span>
                         </div>
                         <div>

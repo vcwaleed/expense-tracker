@@ -1,4 +1,3 @@
-// BalanceDetails.js
 'use client'
 import { useEffect, useState } from 'react';
 import { db } from "../firebase/config";
@@ -35,7 +34,7 @@ export default function BalanceDetails() {
   }, [user]);
   return (
     <main>
-      <section className="block max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-gray-100">
+      <section className="block max-w-lg p-6  hover:border-gray-100">
         <section className="flex flex-col">
           <span className="font-mono text-2xl font-semibold">Balance Details</span>
           <span className="mt-10 font-mono">Available Balance: ${availableBalance}</span>

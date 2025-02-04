@@ -84,7 +84,6 @@ export default function SignUp() {
                                 onChange={(e) => {
                                     setEmail(e.target.value);
                                     setErrorMessage("");
-
                                 }}
                             />
                         </div>
@@ -93,7 +92,6 @@ export default function SignUp() {
                                 <label className="block text-gray-700 text-sm font-bold mb-2">
                                     Password
                                 </label>
-
                             </div>
                             <input
                                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
@@ -118,7 +116,6 @@ export default function SignUp() {
                                 Sign up
                             </button>
                         </div>
-
                         <div className="mt-4 flex items-center justify-between">
                             <span className="border-b w-1/5 md:w-1/4"></span>
                             <a href="login" className="text-xs text-gray-500 uppercase">
