@@ -11,11 +11,26 @@ export default function ExpenseTable() {
         const expensesRef = collection(db, "users", user.uid, "transactions");
         const q = query(expensesRef, where("type", "==", "expense"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const expenseData = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-                date: doc.data().date?.toDate().toLocaleDateString() || "N/A"
-            }));
+            const expenseData = querySnapshot.docs
+                .map(doc => {
+                    const data = doc.data();
+                    const date = data.date?.toDate(); 
+                    return {
+                        id: doc.id,
+                        ...data,
+                        date: date, 
+                    };
+                })
+                .sort((a, b) => {
+                    if (!a.date && !b.date) return 0;
+                    if (!a.date) return 1; 
+                    if (!b.date) return -1; 
+                    return b.date.getTime() - a.date.getTime();
+                })
+                .map(item => ({
+                    ...item,
+                    date: item.date ? item.date.toLocaleDateString() : "N/A"
+                }));
             setExpenses(expenseData);
         });
         return () => unsubscribe();
