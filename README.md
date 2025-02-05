@@ -22,8 +22,6 @@ The **Expense Tracking System** is a Next.js web application that helps users ma
    cd expense-tracker
    npm install 
 
-
-
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
