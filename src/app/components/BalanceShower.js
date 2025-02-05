@@ -33,7 +33,7 @@ export default function BalanceDetails() {
     };
   }, [user]);
   return (
-    <main className="flex justify-center items-center   dark:bg-gray-900">
+    <main className="flex justify-center items-center bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-900">
     <section className="w-full max-w-md p-5 dark:bg-gray-800  dark:border-gray-700">
       <section className="flex flex-col">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white ">
