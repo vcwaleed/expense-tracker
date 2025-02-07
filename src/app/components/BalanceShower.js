@@ -53,6 +53,5 @@ export default function BalanceDetails() {
       </section>
     </section>
   </main>
-  
   );
 }

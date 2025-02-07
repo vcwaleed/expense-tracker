@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { db } from "../firebase/config";
 import { collection, addDoc, getDocs, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
+
 export default function Uploadcard() {
     const { user } = useAuth();
     const [showCashModal, setShowCashModal] = useState(false);
@@ -12,6 +13,7 @@ export default function Uploadcard() {
     const [title, setTitle] = useState('');
     const [expenseAmount, setExpenseAmount] = useState('');
     const [availableBalance, setAvailableBalance] = useState(0);
+
     useEffect(() => {
         const fetchTransactions = async () => {
             if (!user) return;
@@ -216,6 +218,6 @@ export default function Uploadcard() {
                     </div>
                 </div>
             </section>
-        </main>
-    )
-}
+        </main>)
+        }
+        

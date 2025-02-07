@@ -9,6 +9,7 @@ export default function MonthlyExpenseChart() {
     const { user } = useAuth();
     const [totalExpenses, settotalExpenses] = useState(0);
     const [monthlyExpenses, setMonthlyExpenses] = useState([]);
+
     useEffect(() => {
         if (!user) return;
         const expensesQuery = query(
@@ -24,6 +25,7 @@ export default function MonthlyExpenseChart() {
         });
         return () => unsubscribeTotal();
     }, [user]);
+    
     useEffect(() => {
         if (!user) return;
         const expensesQuery = query(

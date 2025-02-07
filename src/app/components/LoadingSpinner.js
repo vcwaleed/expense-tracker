@@ -1,5 +1,5 @@
-'use client'
 import React from 'react';
+
 const LoadingSpinner = () => {
   return (
     <div className=" loadingspinner relative mx-auto mt-80 mb-32 w-[calc(3*var(--offset)+var(--square))] h-[calc(2*var(--offset)+var(--square))]">
@@ -11,5 +11,4 @@ const LoadingSpinner = () => {
     </div>
   );
 };
-
 export default LoadingSpinner;
