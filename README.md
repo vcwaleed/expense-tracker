@@ -43,6 +43,8 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id`
 ## Contributing
 
 Feel free to contribute by creating pull requests or opening issues. Any improvements are welcome!
+![image](https://github.com/user-attachments/assets/4a32fb43-19a9-48d9-9fca-b24dc1ec97cb)
+
 
 
 ## Authors
