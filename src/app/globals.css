@@ -1,19 +1,108 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --square: 26px;
+  --offset: 30px;
+  --duration: 2.4s;
+  --timing-function: ease-in-out;
+  --in-duration: 1.4s;
+  --in-timing-function: ease-out;
 }
-
+.loadingspinner {
+  --delay: 0.2s; 
+}
+.square {
+  @apply absolute inline-block bg-darkorange rounded-sm w-[var(--square)] h-[var(--square)]  animate-square animate-fade-in; /* Common styles */
+}
+.animate-square {
+  animation-duration: var(--duration);
+  animation-timing-function: var(--timing-function);
+  animation-iteration-count: infinite;
+}
+.animate-fade-in {
+    animation-duration: var(--in-duration);
+    animation-timing-function: var(--in-timing-function);
+    animation-fill-mode: both; /* Keeps the final state after the animation */
+}
+#square1 {
+  left: calc(0 * var(--offset));
+  top: calc(0 * var(--offset));
+  animation-name: square1;
+}
+#square2 {
+  left: calc(0 * var(--offset));
+  top: calc(1 * var(--offset));
+  animation-name: square2;
+}
+#square3 {
+  left: calc(1 * var(--offset));
+  top: calc(1 * var(--offset));
+  animation-name: square3;
+}
+#square4 {
+  left: calc(2 * var(--offset));
+  top: calc(1 * var(--offset));
+  animation-name: square4;
+}
+#square5 {
+  left: calc(3 * var(--offset));
+  top: calc(1 * var(--offset));
+  animation-name: square5;
+}
+@keyframes square1 {
+  0% { left: calc(0 * var(--offset)); top: calc(0 * var(--offset)); }
+  8.333% { left: calc(0 * var(--offset)); top: calc(1 * var(--offset)); }
+  100% { left: calc(0 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes square2 {
+  0% { left: calc(0 * var(--offset)); top: calc(1 * var(--offset)); }
+  8.333% { left: calc(0 * var(--offset)); top: calc(2 * var(--offset)); }
+  16.67% { left: calc(1 * var(--offset)); top: calc(2 * var(--offset)); }
+  25.00% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  83.33% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  91.67% { left: calc(1 * var(--offset)); top: calc(0 * var(--offset)); }
+  100% { left: calc(0 * var(--offset)); top: calc(0 * var(--offset)); }
+}
+@keyframes square3 {
+  0%,100% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  16.67% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  25.00% { left: calc(1 * var(--offset)); top: calc(0 * var(--offset)); }
+  33.33% { left: calc(2 * var(--offset)); top: calc(0 * var(--offset)); }
+  41.67% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  66.67% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  75.00% { left: calc(2 * var(--offset)); top: calc(2 * var(--offset)); }
+  83.33% { left: calc(1 * var(--offset)); top: calc(2 * var(--offset)); }
+  91.67% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes square4 {
+  0% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  33.33% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  41.67% { left: calc(2 * var(--offset)); top: calc(2 * var(--offset)); }
+  50.00% { left: calc(3 * var(--offset)); top: calc(2 * var(--offset)); }
+  58.33% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+  100% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes square5 {
+  0% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+  50.00% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+  58.33% { left: calc(3 * var(--offset)); top: calc(0 * var(--offset)); }
+  66.67% { left: calc(2 * var(--offset)); top: calc(0 * var(--offset)); }
+  75.00% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  100% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes squarefadein {
+    0% { transform: scale(1.75); opacity: 0.0; }
+    100% { transform: scale(1.0); opacity: 1.0; }
+}
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
-
 body {
   color: var(--foreground);
   background: var(--background);
